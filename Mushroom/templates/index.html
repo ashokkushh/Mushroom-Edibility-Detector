@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI ML Based Mushroom Edibility Detector</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&amp;display=swap" rel="stylesheet" />
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #000;
+            /* Background color changed to black */
+            color: #fff;
+        }
+
+        .hero-section001 {
+            background-color: #000;
+            /* background-image: url('/static/titlebackground.png'); */
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hero-section001 h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/blackbackground.png');
+            background-size: cover;
+            padding: 10px 0;
+            color: white;
+        }
+
+        .footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .form-column {
+            width: 90%;
+            /* Adjusted width for each column */
+            margin: 0 auto;
+            /* Center align */
+        }
+
+        label,
+        select {
+            display: inline-block;
+            /* Changed to inline-block */
+            vertical-align: top;
+            /* Aligns elements properly */
+            margin-bottom: 10px;
+            /* Adjusted margin for spacing */
+            width: 45%;
+            /* Adjusted width */
+        }
+
+        .login {
+            margin: 0 auto;
+            width: 80%;
+            /* Adjusted width to fit two columns */
+            padding: 20px;
+            background-color: #111;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            /* Added display flex for two columns */
+            flex-direction: row;
+            /* Changed to row to align two columns */
+            justify-content: space-between;
+            /* Added space between columns */
+        }
+
+        /* Adding styles for the popup */
+        .popup {
+            display: none;
+            /* Hide the popup by default */
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            top: 0%;
+            transform: translate(-50%, -50%) scale(0.1);
+            background-color: #fff;
+            transition: transform 0.4s, top 0.4s;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .open-popup {
+            /* visibility: visible; */
+            display: block;
+            top: 20%;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Style for overlay */
+        .overlay {
+            display: none;
+            /* Hide the overlay by default */
+            position: fixed;
+            z-index: 9998;
+            /* Ensure overlay is behind the popup */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Center align the content inside the popup */
+        .popup-content {
+            text-align: center;
+        }
+        .popup button {
+            width: 60%;
+            margin-top: 50px;
+            padding: 10px 0;
+            background: #4480da;
+            color: #fff;
+            border: 0;
+            outline: none;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Your existing content -->
+    <div class="hero-section001">
+        <h1>AI ML Based Mushroom Edibility Detector</h1>
+    </div>
+    <section class="hero-section">
+        <div class="container" style="text-align: center;">
+            <h1>Discover Edible Mushrooms Safely</h1>
+            <p class="lead">Identify mushrooms suitable for safe consumption using our AI & ML driven Application.</p>
+        </div>
+        <section class="container py-5" style="display: flex;">
+            <div class="form-column"
+                style="width: 60%; padding: 5px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <!-- Your form code -->
+                <h3 style="padding-bottom: 10px; text-align: left;">Enter the characteristics of the mushroom</h3>
+                <div style="width: 100%;">
+                    <!-- <p>Enter the characteristics of the mushroom to verify its Edibility.</p> -->
+                    <form id="mushroom-form" class="form-column">
+                        <label for="cap-shape">Cap Shape:</label>
+                        <select name="cap-shape" id="cap-shape">
+                            <option value="b">bell</option>
+                            <option value="c">conical</option>
+                            <option value="x">convex</option>
+                            <option value="f">flat</option>
+                            <option value="k">knobbed</option>
+                            <option value="s">sunken</option>
+                        </select><br>
+                        <label for="cap-surface">Cap Surface:</label>
+                        <select name="cap-surface" id="cap-surface">
+                            <option value="y">scaly</option>
+                            <option value="s">smooth</option>
+                            <option value="f">fibrous</option>
+                            <option value="g">grooves</option>
+                        </select><br>
+
+                        <label for="cap-color">Cap Color:</label>
+                        <select name="cap-color" id="cap-color">
+                            <option value="n">brown</option>
+                            <option value="g">gray</option>
+                            <option value="e">red</option>
+                            <option value="y">yellow</option>
+                            <option value="w">white</option>
+                            <option value="b">buff</option>
+                            <option value="p">pink</option>
+                            <option value="c">cinnamon</option>
+                            <option value="u">purple</option>
+                            <option value="r">green</option>
+                        </select><br>
+
+                        <!-- Add similar dropdowns for other mushroom features -->
+
+                        <label for="bruises">Bruises:</label>
+                        <select name="bruises" id="bruises">
+                            <option value="t">present</option>
+                            <option value="f">absent</option>
+                        </select><br>
+
+                        <label for="odor">Odor:</label>
+                        <select name="odor" id="odor">
+                            <option value="n">none</option>
+                            <option value="f">foul</option>
+                            <option value="y">fishy</option>
+                            <option value="s">spicy</option>
+                            <option value="a">anise</option>
+                            <option value="l">almond</option>
+                            <option value="p">pungent</option>
+                            <option value="c">creosote</option>
+                            <option value="m">musty</option>
+                        </select><br>
+
+                        <label for="gill-attachment">Gill Attachment:</label>
+                        <select name="gill-attachment" id="gill-attachment">
+                            <option value="f">free</option>
+                            <option value="a">attached</option>
+                        </select><br>
+
+                        <label for="gill-spacing">Gill Spacing:</label>
+                        <select name="gill-spacing" id="gill-spacing">
+                            <option value="c">close</option>
+                            <option value="w">crowded</option>
+                        </select><br>
+
+                        <label for="gill-size">Gill Size:</label>
+                        <select name="gill-size" id="gill-size">
+                            <option value="b">broad</option>
+                            <option value="n">narrow</option>
+                        </select><br>
+
+                        <label for="gill-color">Gill Color:</label>
+                        <select name="gill-color" id="gill-color">
+                            <option value="b">buff</option>
+                            <option value="p">pink</option>
+                            <option value="w">white</option>
+                            <option value="n">brown</option>
+                            <option value="g">gray</option>
+                            <option value="h">chocolate</option>
+                            <option value="u">purple</option>
+                            <option value="k">black</option>
+                            <option value="e">red</option>
+                            <option value="y">yellow</option>
+                            <option value="o">orange</option>
+                            <option value="r">green</option>
+                        </select><br>
+
+                        <label for="stalk-shape">Stalk Shape:</label>
+                        <select name="stalk-shape" id="stalk-shape">
+                            <option value="t">tapering</option>
+                            <option value="e">enlarging</option>
+                        </select><br>
+
+                        <label for="stalk-root">Stalk Root:</label>
+                        <select name="stalk-root" id="stalk-root">
+                            <option value="b">bulbous</option>
+                            <option value="?">missing</option>
+                            <option value="e">equal</option>
+                            <option value="c">club</option>
+                            <option value="r">rooted</option>
+                        </select><br>
+
+                        <label for="stalk-surface-above-ring">Stalk Surface Above Ring:</label>
+                        <select name="stalk-surface-above-ring" id="stalk-surface-above-ring">
+                            <option value="s">smooth</option>
+                            <option value="k">silky</option>
+                            <option value="f">fibrous</option>
+                            <option value="y">scaly</option>
+                        </select><br>
+
+                        <label for="stalk-surface-below-ring">Stalk Surface Below Ring:</label>
+                        <select name="stalk-surface-below-ring" id="stalk-surface-below-ring">
+                            <option value="s">smooth</option>
+                            <option value="k">silky</option>
+                            <option value="f">fibrous</option>
+                            <option value="y">scaly</option>
+                        </select><br>
+
+                        <label for="stalk-color-above-ring">Stalk Color Above Ring:</label>
+                        <select name="stalk-color-above-ring" id="stalk-color-above-ring">
+                            <option value="w">white</option>
+                            <option value="p">pink</option>
+                            <option value="g">gray</option>
+                            <option value="n">brown</option>
+                            <option value="b">buff</option>
+                            <option value="o">orange</option>
+                            <option value="e">red</option>
+                            <option value="c">cinnamon</option>
+                            <option value="y">yellow</option>
+                        </select><br>
+
+                        <label for="stalk-color-below-ring">Stalk Color Below Ring:</label>
+                        <select name="stalk-color-below-ring" id="stalk-color-below-ring">
+                            <option value="w">white</option>
+                            <option value="p">pink</option>
+                            <option value="g">gray</option>
+                            <option value="n">brown</option>
+                            <option value="b">buff</option>
+                            <option value="o">orange</option>
+                            <option value="e">red</option>
+                            <option value="c">cinnamon</option>
+                            <option value="y">yellow</option>
+                        </select><br>
+
+                        <label for="veil-type">Veil Type:</label>
+                        <select name="veil-type" id="veil-type">
+                            <option value="p">partial</option>
+                        </select><br>
+
+                        <label for="veil-color">Veil Color:</label>
+                        <select name="veil-color" id="veil-color">
+                            <option value="w">white</option>
+                            <option value="n">brown</option>
+                            <option value="o">orange</option>
+                            <option value="y">yellow</option>
+                        </select><br>
+
+                        <label for="ring-number">Ring Number:</label>
+                        <select name="ring-number" id="ring-number">
+                            <option value="o">one</option>
+                            <option value="t">two</option>
+                            <option value="n">none</option>
+                        </select><br>
+
+                        <label for="ring-type">Ring Type:</label>
+                        <select name="ring-type" id="ring-type">
+                            <option value="p">pendant</option>
+                            <option value="e">evanescent</option>
+                            <option value="l">large</option>
+                            <option value="f">flaring</option>
+                            <option value="n">none</option>
+                        </select><br>
+
+                        <label for="spore-print-color">Spore Print Color:</label>
+                        <select name="spore-print-color" id="spore-print-color">
+                            <option value="w">white</option>
+                            <option value="n">brown</option>
+                            <option value="k">black</option>
+                            <option value="h">chocolate</option>
+                            <option value="r">green</option>
+                            <option value="u">purple</option>
+                            <option value="o">orange</option>
+                            <option value="y">yellow</option>
+                            <option value="b">buff</option>
+                        </select><br>
+
+                        <label for="population">Population:</label>
+                        <select name="population" id="population">
+                            <option value="v">several</option>
+                            <option value="y">solitary</option>
+                            <option value="s">scattered</option>
+                            <option value="n">numerous</option>
+                            <option value="a">abundant</option>
+                            <option value="c">clustered</option>
+                        </select><br>
+
+                        <label for="habitat">Habitat:</label>
+                        <select name="habitat" id="habitat">
+                            <option value="d">woods</option>
+                            <option value="g">grasses</option>
+                            <option value="p">paths</option>
+                            <option value="l">leaves</option>
+                            <option value="u">urban</option>
+                            <option value="m">meadows</option>
+                            <option value="w">waste</option>
+                        </select><br>
+                        <br>
+
+                        <button type="button" onclick="predictMushroomEdibility()"
+                            class="btn btn-primary btn-block btn-large">Predict
+                            Mushroom Edibility</button>
+                    </form>
+
+                    <br>
+
+                </div>
+                <!-- Add a button to trigger the popup -->
+                <!-- <button class="btn btn-primary" onclick="openPopup()">Predict Mushroom Edibility</button> -->
+            </div>
+            <div style="width: 40%; padding: 0%;">
+                <!-- Your existing content -->
+                <!-- <p class="lead">
+                    Do you know that mushrooms are more closely related to animals than plants, sharing a common
+                    ancestor in the ancient evolutionary timeline? Moreover, they possess remarkable abilities like
+                    breaking down toxic materials and aiding in nutrient cycling within ecosystems. Beyond their
+                    enigmatic nature, mushrooms offer unique benefits to humans. Certain varieties, such as reishi and
+                    lion's mane, are celebrated for their medicinal properties, boasting immune-boosting and
+                    cognitive-enhancing effects. Additionally, mushrooms serve as sustainable protein sources, with some
+                    species containing all nine essential amino acids. However, the allure of mushrooms is not without
+                    caution. While many varieties are safe for consumption, some are highly toxic, containing compounds
+                    that can cause severe illness or even death if ingested. It's imperative for mushroom enthusiasts to
+                    exercise caution and knowledge when foraging, as misidentification of poisonous species can have
+                    dire consequences.
+                </p> -->
+            </div>
+        </section>
+    </section>
+
+    <!-- Popup -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2>Prediction Result</h2>
+            <h4 style="color: violet;">{{ prediction_text }}</h4>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Your existing footer -->
+    <footer class="footer">
+        <div>AI ML Based Mushroom Edibility Detector</div>
+    </footer>
+
+    <!-- JavaScript to control the popup -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function openPopup() {
+            // Show the popup
+            // document.getElementById("popup").style.display = "block";
+            document.getElementById("popup").classList.add("open-popup");
+            // Show the overlay
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closePopup() {
+            // Hide the popup
+            // document.getElementById("popup").style.display = "none";
+            document.getElementById("popup").classList.remove("open-popup");
+            // Hide the overlay
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function predictMushroomEdibility() {
+            // Serialize form data
+            var formData = $('#mushroom-form').serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/predict",
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    // Update the prediction result in the popup
+                    $('.popup-content').html('<h2>Prediction Result</h2><h4 style="color: violet;">' + response.prediction_text + '</h4><button onclick="closePopup()">OK</button>');
+                    // $('.popup-content').html(response);
+                    // Show the popup
+                    openPopup();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
