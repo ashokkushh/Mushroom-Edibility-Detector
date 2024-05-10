@@ -40,4 +40,4 @@ def predict():
     #return render_template('index.html', prediction_text='The Mushroom is {}'.format(result))
     return jsonify(prediction_text='The Mushroom is {}'.format(result))
 if __name__ == "__main__":
-    app.run()
+    app.run(debug= False, host='0.0.0.0')
